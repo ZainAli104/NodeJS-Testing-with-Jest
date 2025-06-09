@@ -1,6 +1,8 @@
 import {z} from "zod";
 import express, {RequestHandler} from "express";
 
+import {prismadb} from "./db";
+
 export const app = express();
 
 app.use(express.json());
@@ -10,7 +12,7 @@ const sumInput = z.object({
     b: z.number()
 })
 
-const postSumHandler: RequestHandler = (req, res) => {
+const postSumHandler: RequestHandler = async (req, res) => {
     const parsedResponse = sumInput.safeParse(req.body)
 
     if (!parsedResponse.success) {
@@ -21,6 +23,14 @@ const postSumHandler: RequestHandler = (req, res) => {
     }
 
     const answer = parsedResponse.data.a + parsedResponse.data.b;
+
+    await prismadb.sum.create({
+        data: {
+            a: parsedResponse.data.a,
+            b: parsedResponse.data.b,
+            result: answer
+        }
+    })
 
     res.json({
         answer

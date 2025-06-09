@@ -1,7 +1,11 @@
 import request from "supertest";
-import {describe, expect, it} from '@jest/globals';
+import {describe, expect, it, vi} from 'vitest';
 
-import {app} from "../index"
+import {app} from "../index";
+
+vi.mock('../db', () => ({
+    prismadb: {sum: {create: vi.fn()}}
+}));
 
 describe("POST /sum", () => {
     it("should return the sum of two numbers", async () => {
