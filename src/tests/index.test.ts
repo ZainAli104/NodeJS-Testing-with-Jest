@@ -3,9 +3,10 @@ import {describe, expect, it, vi} from 'vitest';
 
 import {app} from "../index";
 
-vi.mock('../db', () => ({
-    prismadb: {sum: {create: vi.fn()}}
-}));
+// vi.mock('../db', () => ({
+//     prismadb: {sum: {create: vi.fn()}}
+// }));
+vi.mock('../db');
 
 describe("POST /sum", () => {
     it("should return the sum of two numbers", async () => {
